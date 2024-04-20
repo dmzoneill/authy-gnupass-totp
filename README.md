@@ -6,8 +6,8 @@ The gnu pass entry consist of all your totp secrets, for all your accounts,\
 in once place. I have created a sync script to update the pass entry.\
 TOTP views conists of a bash script, curses and python gtk solutions.
 
-## Basic setup
-- browser plugin 
+## ToDo
+- browser plugin
 
 ## Basic setup
 Symlink the file and make executable
