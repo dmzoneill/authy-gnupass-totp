@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 import gi
+
 gi.require_version("Gdk", "4.0")
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, GLib, Gdk
 import subprocess
 import time
+
 
 class TOTPApp(Gtk.Application):
     def __init__(self):
@@ -28,7 +30,9 @@ class TOTPApp(Gtk.Application):
         current_time = time.time()
         next_interval = 30 - int(current_time % 30)
 
-        self.code_update_timer = GLib.timeout_add_seconds(next_interval, self.update_codes)
+        self.code_update_timer = GLib.timeout_add_seconds(
+            next_interval, self.update_codes
+        )
 
         # Update countdown every second
         self.countdown_timer = GLib.timeout_add_seconds(1, self.update_countdown)
@@ -40,7 +44,7 @@ class TOTPApp(Gtk.Application):
             if path is not None:
                 column_index = self.treeview.get_columns().index(path[1])
                 # Get the value of the cell at the clicked path
-                value = self.liststore[path[0].get_indices()[0]-1][column_index]
+                value = self.liststore[path[0].get_indices()[0] - 1][column_index]
                 clipboard = Gdk.Display.get_default().get_clipboard()
                 clipboard.set(value)
                 self.show_overlay("Copied", 3)
@@ -72,14 +76,20 @@ class TOTPApp(Gtk.Application):
 
             # Create a label for the overlay with transparent background and bold text
             self.overlay_label = Gtk.Label(label="Copied")
-            self.overlay_label.set_name("overlay-label")  # Set a custom name for styling
-            self.overlay_label.set_markup('<span font_desc="32" weight="bold">Copied</span>')
+            self.overlay_label.set_name(
+                "overlay-label"
+            )  # Set a custom name for styling
+            self.overlay_label.set_markup(
+                '<span font_desc="32" weight="bold">Copied</span>'
+            )
 
             # Add the overlay label to the overlay
             self.overlay.add_overlay(self.overlay_label)
 
         # Create a list store to store TOTP entries
-        self.liststore = Gtk.ListStore(str, str, str, str, str)  # Added one more column for countdown
+        self.liststore = Gtk.ListStore(
+            str, str, str, str, str
+        )  # Added one more column for countdown
 
         # Create a treeview to display the TOTP entries
         self.treeview = Gtk.TreeView(model=self.liststore)
@@ -94,7 +104,9 @@ class TOTPApp(Gtk.Application):
         self.treeview.add_controller(self.gesture)
 
         # Add columns to the treeview
-        for i, column_title in enumerate(["Service", "Username", "Current Code", "Next Code", "Countdown"]):  # Added "Countdown"
+        for i, column_title in enumerate(
+            ["Service", "Username", "Current Code", "Next Code", "Countdown"]
+        ):  # Added "Countdown"
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
             self.treeview.insert_column(column, i)
@@ -109,7 +121,7 @@ class TOTPApp(Gtk.Application):
 
     def generate_totp(self, entry):
         # Extract service, username, digits, and secret from the entry
-        entry_info = entry[len("otpauth://totp/"):]  # Strip off "otpauth://totp/"
+        entry_info = entry[len("otpauth://totp/") :]  # Strip off "otpauth://totp/"
         entry_parts = entry_info.split("?", 1)
 
         parameters = {}
@@ -129,7 +141,24 @@ class TOTPApp(Gtk.Application):
 
     def call_oathtool(self, secret, digits):
         # Generate HOTP using oathtool for current time and next time
-        codes = subprocess.check_output(["oathtool", "-s", "30s", "-d", digits, "-b", "--totp", secret, "-w", "1"]).decode().split('\n')
+        codes = (
+            subprocess.check_output(
+                [
+                    "oathtool",
+                    "-s",
+                    "30s",
+                    "-d",
+                    digits,
+                    "-b",
+                    "--totp",
+                    secret,
+                    "-w",
+                    "1",
+                ]
+            )
+            .decode()
+            .split("\n")
+        )
         # Extract the current and next codes
         current_code = codes[0]
         next_code = codes[-2]
@@ -137,9 +166,11 @@ class TOTPApp(Gtk.Application):
 
     def fetch_entries(self):
         # Read each TOTP entry from the "totp/all" pass entry
-        pass_entries = subprocess.check_output(["pass", "show", "totp/all"]).decode().split('\n')
+        pass_entries = (
+            subprocess.check_output(["pass", "show", "totp/all"]).decode().split("\n")
+        )
         # Sort entries by service
-        sorted_entries = sorted(pass_entries, key=lambda x: x.split(':')[0])
+        sorted_entries = sorted(pass_entries, key=lambda x: x.split(":")[0])
 
         # Clear existing entries in the liststore
         self.liststore.clear()
@@ -149,12 +180,14 @@ class TOTPApp(Gtk.Application):
 
         # Generate and display TOTP codes
         for entry in sorted_entries:
-            if 'otpauth' not in entry:
+            if "otpauth" not in entry:
                 continue
 
             current_code, next_code = self.generate_totp(entry)
-            entry_info = entry[len("otpauth://totp/"):]  # Strip off "otpauth://totp/"
-            service_and_username = entry_info.split("?", 1)[0]  # Select everything until "?"
+            entry_info = entry[len("otpauth://totp/") :]  # Strip off "otpauth://totp/"
+            service_and_username = entry_info.split("?", 1)[
+                0
+            ]  # Select everything until "?"
 
             # Determine service and username
             if ":" in service_and_username:
@@ -164,12 +197,16 @@ class TOTPApp(Gtk.Application):
                 username = service_and_username
 
             # Append the entry to the liststore
-            self.liststore.append([service, username, current_code, next_code, str(next_interval)])  # Initialize countdown as 30
+            self.liststore.append(
+                [service, username, current_code, next_code, str(next_interval)]
+            )  # Initialize countdown as 30
 
     def update_countdown(self):
         current_time = time.time()
         initial_countdown = 30 - int(current_time % 30)
-        initial_countdown = initial_countdown if initial_countdown < 30 else "Updating .."
+        initial_countdown = (
+            initial_countdown if initial_countdown < 30 else "Updating .."
+        )
 
         for row in self.liststore:
             row[4] = str(initial_countdown)
@@ -180,6 +217,7 @@ class TOTPApp(Gtk.Application):
 
     def on_destroy(self, window):
         Gtk.ApplicationWindow.do_destroy(window)
+
 
 app = TOTPApp()
 app.run(None)
