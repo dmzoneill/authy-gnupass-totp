@@ -47,11 +47,32 @@ $ go/bin/authy-export
 Symlink sync file and make executable
 ```bash
 $ sudo ln -s $PWD/sync /usr/local/bin/totp-sync
+$ sudo ln -s $PWD/totp /usr/local/bin/totp
+$ sudo ln -s $PWD/ctotp /usr/local/bin/ctotp
+$ sudo ln -s $PWD/gtotp /usr/local/bin/gtotp
 $ chmod +x sync
+$ chmod +x ctotp
+$ chmod +x gtotp
+$ chmod +x totp
 ```
 
-Run it
+Run sync it
 ```bash
 $ AUTHY_EXPORT_PASSWORD=yourpass
 $ totp-sync
+```
+
+Bash static output
+```bash
+$ totp
+```
+
+Bash Curses
+```bash
+$ ctotp
+```
+
+PyGTK 4
+```bash
+$ gtotp
 ```
