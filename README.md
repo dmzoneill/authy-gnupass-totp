@@ -1,4 +1,4 @@
-# pass-totp
+# authy-gnupass-totp
 
 ### Basic setup
 Symlink the file and make executable
