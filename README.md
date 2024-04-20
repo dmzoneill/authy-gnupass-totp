@@ -1,5 +1,11 @@
 # authy-gnupass-totp
 
+This solution migrates from authy desktop app to gnupass.
+it works by copying the totp lines to an entry in gpnupass called totp/all.
+The gnu pass entry consist of all your totp secrets, for all your accounts,
+in once place. I have created a sync script to update the pass entry.
+TOTP views conists of a bash script, curses and python gtk solutions.
+
 ## Basic setup
 - browser plugin 
 
