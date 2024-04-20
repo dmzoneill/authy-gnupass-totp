@@ -1,6 +1,9 @@
 # authy-gnupass-totp
 
 ## Basic setup
+- browser plugin 
+
+## Basic setup
 Symlink the file and make executable
 ```bash
 sudo ln -s $PWD/totp /usr/local/bin/totp
