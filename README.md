@@ -66,13 +66,16 @@ Bash static output
 ```bash
 $ totp
 ```
+![totp](https://raw.githubusercontent.com/dmzoneill/pass-totp/main/imgs/totp.png)
 
 Bash Curses
 ```bash
 $ ctotp
 ```
+![ctotp](https://raw.githubusercontent.com/dmzoneill/pass-totp/main/imgs/ctotp.png)
 
 PyGTK 4
 ```bash
 $ gtotp
 ```
+![gtotp](https://raw.githubusercontent.com/dmzoneill/pass-totp/main/imgs/gtotp.png)
