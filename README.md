@@ -1,6 +1,6 @@
 # authy-gnupass-totp
 
-### Basic setup
+## Basic setup
 Symlink the file and make executable
 ```bash
 sudo ln -s $PWD/totp /usr/local/bin/totp
@@ -12,18 +12,18 @@ Insert your totp's into totp/all
 pass insert totp/all
 ```
 
-Contents of the password entry should be similar to 
-```
-otpauth://totp/Facebook:user1?digits=6&secret=25WQDUTSG3VRWGXZMGZADZV4DW5WGPKG
-otpauth://totp/Google:xx@gmail.comdigits=6&secret=SJXDTQTXN3UVR4TG2HNIMLPLKYGFMHJ4
-otpauth://totp/Docker:user2?digits=6&secret=NC2BTBFSWF3N6FKMX24JFCKEYZVN2JMS
+Contents of the password entry should be similar to
+```bash
+otpauth://totp/Facebook:user1?digits=6&secret=your_secret
+otpauth://totp/Google:xx@gmail.comdigits=6&secret=your_secret
+otpauth://totp/Docker:user2?digits=6&secret=your_secret
 ```
 update it at any time with
 ```bash
 pass edit totp/all
 ```
 
-### Usage
+## Usage
 Simply run
 ```bash
 totp
@@ -35,7 +35,7 @@ PyPI       lol            538759      902529      17 secs
 
 ## Sync with authy
 
-Get authy exporter 
+Get authy exporter
 ```bash
 go install github.com/alexzorin/authy/...@latest
 ```
